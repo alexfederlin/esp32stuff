@@ -1,0 +1,572 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"dew",
+				"dewPoint"
+			],
+			[
+				"res",
+				"response"
+			],
+			[
+				"dra",
+				"drawVolume"
+			],
+			[
+				"item",
+				"itemsToBeProcessed"
+			],
+			[
+				"itm",
+				"itemsToBeProcessed"
+			],
+			[
+				"pop",
+				"populateDbContents"
+			],
+			[
+				"po",
+				"position"
+			],
+			[
+				"playlist",
+				"playlistlength"
+			],
+			[
+				"pause",
+				"pause"
+			],
+			[
+				"trac",
+				"trackinfo"
+			],
+			[
+				"data",
+				"datastore"
+			],
+			[
+				"cons",
+				"console"
+			],
+			[
+				"A",
+				"Arduino"
+			],
+			[
+				"message",
+				"message"
+			],
+			[
+				"mip",
+				"mipodurl"
+			],
+			[
+				"mido",
+				"mipodurl"
+			],
+			[
+				"port",
+				"port"
+			],
+			[
+				"start",
+				"startsWith"
+			],
+			[
+				"_",
+				"_checkedvalues"
+			],
+			[
+				"train",
+				"traindata"
+			],
+			[
+				"i",
+				"i"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "src/main.ino",
+			"settings":
+			{
+				"buffer_size": 5920,
+				"encoding": "UTF-8",
+				"line_ending": "Unix",
+				"name": "#include <ESP8266WiFi.h>"
+			}
+		},
+		{
+			"file": ".piolibdeps/Adafruit BMP280 Library_ID528/Adafruit_BMP280.h",
+			"settings":
+			{
+				"buffer_size": 4665,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": ".piolibdeps/Adafruit BME280 Library_ID166/Adafruit_BME280.h",
+			"settings":
+			{
+				"buffer_size": 9103,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": ".piolibdeps/Adafruit BME280 Library_ID166/README.md",
+			"settings":
+			{
+				"buffer_size": 3242,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "platformio.ini",
+			"settings":
+			{
+				"buffer_size": 527,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 184.0,
+		"last_filter": "Package Control: ins",
+		"selected_items":
+		[
+			[
+				"Package Control: ins",
+				"Package Control: Install Package"
+			],
+			[
+				"remote",
+				"Remote Edit: Open Remote File Prompt"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 479.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/home/alex/Daten/Projekte/ESP8266/temperature_mqtt",
+		"/home/alex/Daten/Projekte/ESP8266/temperature_mqtt/.pioenvs",
+		"/home/alex/Daten/Projekte/ESP8266/temperature_mqtt/.piolibdeps",
+		"/home/alex/Daten/Projekte/ESP8266/temperature_mqtt/.piolibdeps/Adafruit BME280 Library_ID166",
+		"/home/alex/Daten/Projekte/ESP8266/temperature_mqtt/.piolibdeps/Adafruit BMP280 Library_ID528",
+		"/home/alex/Daten/Projekte/ESP8266/temperature_mqtt/lib"
+	],
+	"file_history":
+	[
+		"/home/alex/Daten/Projekte/ESP32/tempreader/platformio.ini",
+		"/home/alex/Daten/Projekte/ESP32/test/platformio.ini",
+		"/home/alex/jukebox/Provisioning/expresspopulator/public/largemock.data",
+		"/home/alex/jukebox/Provisioning/expresspopulator/public/mock.data",
+		"/home/alex/jukebox/Provisioning/expresspopulator/node_modules/express/lib/express.js",
+		"/home/alex/jukebox/Provisioning/expresspopulator/views/index.jade",
+		"/home/alex/jukebox/Provisioning/expresspopulator/routes/users.js",
+		"/home/alex/jukebox/Provisioning/expresspopulator/node_modules/amdefine/amdefine.js",
+		"/run/user/1000/gvfs/sftp:host=192.168.2.126,user=pi/home/pi/oled/Adafruit_Python_SSD1306/examples/volume.py",
+		"/home/alex/jukebox/Provisioning/expresspopulator/testform.html",
+		"/home/alex/jukebox/Provisioning/expresspopulator/app.js",
+		"/home/alex/.ssh/config",
+		"/home/alex/tmp/dirs",
+		"/home/alex/GAMES/velocidrone/start.sh",
+		"/home/alex/jukebox/Provisioning/database.db",
+		"/home/alex/jukebox/ATtiny/buttonctrl.ino",
+		"/home/alex/Daten/Projekte/Development/jukebox/Arduino/jukebox/src/jukebox.ino",
+		"/home/alex/Daten/Projekte/BlinkM/Fanjita-cyz_rgb_fork-91bccc23ecd0/make/makefile",
+		"/home/alex/tmp/hinweise.pdf",
+		"/home/alex/Daten/Projekte/BlinkM/attiny/Makefile",
+		"/home/alex/Daten/Projekte/BlinkM/attiny/main.c",
+		"/home/alex/Arduino/AsmTinySerial_Demo/AsmTinySerial.h",
+		"/home/alex/Arduino/libraries/AsmTinySerial/src/AsmTinySerial.S",
+		"/home/alex/jukebox/Provisioning/onlinepopulator/onlinepopulator.js",
+		"/home/alex/Downloads/BlinkMCommunicator/BlinkMCommunicator.ino",
+		"/home/alex/Daten/Projekte/BlinkM/BlinkMCommunicator/BlinkM_funcs.h",
+		"/home/alex/Daten/Projekte/BlinkM/BlinkM-Examples/arduino/BlinkMColorFader/BlinkMColorFader.ino",
+		"/home/alex/Daten/Projekte/BlinkM/BlinkM-Examples/arduino/BlinkMTester/BlinkMTester.ino",
+		"/home/alex/Daten/Projekte/BlinkM/BlinkM-Examples/arduino/BlinkMScriptWriter/BlinkMScriptWriter.ino",
+		"/home/alex/Daten/Projekte/BlinkM/BlinkM-Examples/arduino/BlinkMScriptWriter2/BlinkMScriptWriter2.ino",
+		"/home/alex/Daten/Projekte/Development/jukebox/Provisioning/expresspopulator/app.js",
+		"/home/alex/Daten/Projekte/Development/jukebox/Provisioning/expresspopulator/package.json",
+		"/home/alex/.arduino15/preferences.txt",
+		"/home/alex/jukebox/Provisioning/onlinepopulator/database.db",
+		"/home/alex/jukebox/Raspberry/Ansible/testing_mount_music_part.yml",
+		"/home/alex/Daten/Projekte/Development/jukebox/Provisioning/onlinepopulator/database.db",
+		"/home/alex/Daten/Projekte/Development/jukebox/DBpopulator/dbtest.js",
+		"/home/alex/Daten/Projekte/Development/jukebox/Raspberry/Ansible/get_jukebox_source.yml",
+		"/home/alex/Daten/Projekte/Development/jukebox/DBpopulator/dbreadtest.js",
+		"/home/alex/Daten/Projekte/Development/jukebox/DBpopulator/database.db",
+		"/home/alex/jukebox/Raspberry/Ansible/asound_template_35mm.conf",
+		"/home/alex/jukebox/Raspberry/Ansible/opt01a_35mm_sound.yml",
+		"/home/alex/jukebox/Raspberry/Ansible/mpd_template_USB.conf",
+		"/home/alex/jukebox/Raspberry/Ansible/mpd_template.conf",
+		"/home/alex/jukebox/Raspberry/Ansible/opt01_USB_sound.yml",
+		"/home/alex/jukebox/Raspberry/Ansible/04_config_rsyncd.yml",
+		"/home/alex/jukebox/Raspberry/Ansible/03_install_and_start_services.yml",
+		"/home/alex/jukebox/Raspberry/Ansible/01a_mount_music.yml",
+		"/home/alex/jukebox/Raspberry/Ansible/01_initial_deployment.yml",
+		"/home/alex/jukebox/Raspberry/Ansible/opt01a_35mmjack_sound.yml",
+		"/run/user/1000/gvfs/sftp:host=jb1,user=pi/home/pi/jukebox/Raspberry/arduinogw/arduinogw_serial.js",
+		"/run/user/1000/gvfs/sftp:host=jb1,user=pi/home/pi/jukebox/Arduino/jukebox/src/jukebox.ino",
+		"/run/user/1000/gvfs/sftp:host=jb1,user=pi/home/pi/jukebox/Raspberry/arduinogw/stringtest.js",
+		"/home/alex/jukebox/Provisioning/DBpopulator/database.db",
+		"/run/user/1000/gvfs/sftp:host=jb1,user=pi/home/pi/jukebox/Raspberry/playlistmapper/database.db",
+		"/run/user/1000/gvfs/sftp:host=jb1,user=pi/home/pi/jukebox/Raspberry/playlistmapper/playlistmapper.js",
+		"/home/alex/jukebox/Raspberry/Ansible/install_and_start_services.yaml",
+		"/home/alex/jukebox/Raspberry/Ansible/config_rsyncd.yaml",
+		"/home/alex/jukebox/Raspberry/Ansible/initial_deployment.yml",
+		"/home/alex/jukebox/Raspberry/Ansible/get_jukebox_source.yml",
+		"/run/user/1000/gvfs/sftp:host=jb1,user=pi/home/pi/jukebox/Raspberry/startup/jukebox_arduinogw.service",
+		"/run/user/1000/gvfs/sftp:host=jb1,user=pi/home/pi/jukebox/Raspberry/startup/jukebox_mipod.service",
+		"/run/user/1000/gvfs/sftp:host=jb1,user=pi/home/pi/jukebox/Raspberry/startup/jukebox_playlistmapper.service",
+		"/run/user/1000/gvfs/sftp:host=jb1,user=pi/home/pi/jukebox/Raspberry/startup/jukebox_relaiscontrol.service",
+		"/home/alex/jukebox/Raspberry/Ansible/Arduino_dev_env_install.yml",
+		"/home/alex/Daten/Projekte/Development/jukebox/Raspberry/Ansible/initial_deployment.yml",
+		"/home/alex/.conky/myconky/weather.sh",
+		"/home/alex/.config/sublime-text-3/Packages/User/Preferences.sublime-settings",
+		"/home/alex/Daten/Projekte/Development/jukebox/Raspberry/playlistmapper/database.db",
+		"/home/alex/Daten/Projekte/Development/jukebox/Raspberry/Ansible/asound_template.conf",
+		"/home/alex/Daten/Projekte/Development/jukebox/Raspberry/Ansible/sync_music.sh",
+		"/home/alex/Daten/Projekte/Development/jukebox/Raspberry/Ansible/mpd_template_USB.conf",
+		"/home/alex/Daten/Projekte/Development/jukebox/Raspberry/Ansible/USB_sound.yaml",
+		"/home/alex/Daten/Projekte/Development/jukebox/arduinogw/arduinogw_serial.js",
+		"/home/alex/Daten/Projekte/Development/jukebox/arduinogw/node_modules/arduino-interface/index.js",
+		"/home/alex/Daten/Projekte/Development/jukebox/Raspberry/Ansible/rsyncd_template.conf",
+		"/home/alex/.config/sublime-text-3/Packages/Default/Preferences.sublime-settings",
+		"/home/alex/jukebox/DBpopulator/database.db",
+		"/home/alex/Daten/Projekte/Development/jukebox/buttons/server.js",
+		"/home/alex/.conky/qlocktwo/qlocktwo.conky",
+		"/home/alex/.conky/myconky/conkyrc",
+		"/home/alex/jukebox/rfidctrl/rfidctrl.js",
+		"/home/alex/Daten/Projekte/Development/jukebox/tts/tts.js",
+		"/home/alex/jukebox/rfidread/index.js",
+		"/home/alex/jukebox/arduinogw/arduinogw_serial.js",
+		"/home/alex/Daten/Projekte/Development/jukebox/tts/tts1.js",
+		"/home/alex/jukebox/DBpopulator/dbreadtest.js",
+		"/home/alex/Arduino/libraries/SeeedRFID/SeeedRFID.cpp",
+		"/home/alex/jukebox/Arduino/libraries/RDM630/rdm630.h",
+		"/home/alex/jukebox/Arduino/libraries/RDM630/rdm630.cpp",
+		"/home/alex/.config/sublime-text-3/Packages/User/Default (Linux).sublime-keymap",
+		"/home/alex/jukebox/Arduino/arduino_playground_rdm630/arduino_playground_rdm630.ino",
+		"/home/alex/Arduino/libraries/RDM630/rdm630.h",
+		"/home/alex/Arduino/libraries/RDM630/rdm630.cpp",
+		"/home/alex/.config/sublime-text-3/Packages/Default/Default (Linux).sublime-keymap",
+		"/home/alex/tmp/Hetzner_2017-01-28_domains.csv",
+		"/home/alex/Dropbox/Projects/docker-test/Dockerfile",
+		"/home/alex/Dropbox/Projects/docker-test/server.js",
+		"/home/alex/Daten/EricssonResponse/KVM_WAC/image.xml",
+		"/home/alex/Daten/Projekte/Development/webcam/raspi/digits/showshapes.py",
+		"/home/alex/Dropbox/Projects/docker-test/package.json",
+		"/mnt/raspberry/webcam/OCR/Ocrtest.py",
+		"/mnt/raspberry/webcam/OCR/OcrTrain.py",
+		"/mnt/raspberry/webcam/OCR/plausiTest.py",
+		"/mnt/raspberry/webcam/OCR/Plausi.py",
+		"/mnt/raspberry/webcam/OCR/KNearestOcr.py",
+		"/mnt/raspberry/webcam/zaehlerstand.txt"
+	],
+	"find":
+	{
+		"height": 38.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": true,
+		"find_history":
+		[
+			"dewPoint"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "src/main.ino",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5920,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5262,
+								5262
+							]
+						],
+						"settings":
+						{
+							"auto_name": "#include <ESP8266WiFi.h>",
+							"syntax": "Packages/Deviot (Arduino IDE)/deviot.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 2565.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": ".piolibdeps/Adafruit BMP280 Library_ID528/Adafruit_BMP280.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4665,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1159,
+								1159
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": ".piolibdeps/Adafruit BME280 Library_ID166/Adafruit_BME280.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 9103,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5363,
+								5363
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1770.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": ".piolibdeps/Adafruit BME280 Library_ID166/README.md",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3242,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2303,
+								2303
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Markdown/Markdown.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "platformio.ini",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 527,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								515,
+								515
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 23.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "platformio.sublime-project",
+	"replace":
+	{
+		"height": 42.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 206.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
