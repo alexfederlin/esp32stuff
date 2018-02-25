@@ -1,5 +1,7 @@
 #include <Arduino.h>
 #include "WiFi.h"
+#include <WiFiMulti.h>
+
 //#include <ESP8266WiFi.h>
 #include <Wire.h>
 #include <PubSubClient.h>
@@ -10,15 +12,19 @@
 int timezone = 3;
 int dst = 0;
 
+WiFiMulti WiFiMulti;
+
 #define wifi_ssid "iot"
 #define wifi_password "iot123456"
+
+
 
 #define mqtt_server "192.168.2.2"
 #define mqtt_user "YOUR_MQTT_USERNAME"
 #define mqtt_password "YOUR_MQTT_PASSWORD"
 
 // In case you have more than one sensor, make each one a different number here
-#define sensor_number "1"
+#define sensor_number "2"
 #define humidity_topic "sensor/" sensor_number "/humidity/percentRelative"
 #define dewpoint_topic "sensor/" sensor_number "/humidity/dewPoint"
 #define temperature_c_topic "sensor/" sensor_number "/temperature/degreeCelsius"
@@ -27,7 +33,8 @@ int dst = 0;
 #define barometer_inhg_topic "sensor/" sensor_number "/barometer/inchHg"
 // Lookup for your altitude and fill in here, units hPa
 // Positive for altitude above sea level
-#define baro_corr_hpa 34.5879 // = 289m above sea level
+//#define baro_corr_hpa 34.5879 // = 289m above sea level
+#define baro_corr_hpa 0
 
 #define red_led 0
 #define blue_led 2
@@ -48,7 +55,10 @@ void setup() {
   delay(1000);
   // Set SDA and SDL ports
   //Wire.begin(SDA, SCL);
-  Wire.begin(4, 5);
+  //for 8266
+  //Wire.begin(4, 5);
+  // for ESP32
+  Wire.begin(21, 22);
   blink_red;
   delay(1000);
   // Using I2C on the HUZZAH board SCK=#5, SDI=#4 by default
@@ -95,15 +105,23 @@ void setup_wifi() {
   delay(10);
   // We start by connecting to a WiFi network
   Serial.println();
-  Serial.print("Connecting to ");
-  Serial.println(wifi_ssid);
+  Serial.print("Connecting to Wifi SSID ");
+  Serial.print(wifi_ssid);
+  Serial.print(" with password: ");
+  Serial.print(wifi_password);
 
-  WiFi.begin(wifi_ssid, wifi_password);
+  // WiFi.begin(wifi_ssid, wifi_password);
 
-  while (WiFi.status() != WL_CONNECTED) {
-    blink_blue();
-    delay(480);
-    Serial.print(".");
+  // while (WiFi.status() != WL_CONNECTED) {
+  //   blink_blue();
+  //   delay(480);
+  //   Serial.print(".");
+  // }
+
+  WiFiMulti.addAP(wifi_ssid, wifi_password);
+  while(WiFiMulti.run() != WL_CONNECTED) {
+      Serial.print(".");
+      delay(500);
   }
 
   Serial.println("");
@@ -119,7 +137,8 @@ void reconnect() {
     // Attempt to connect
     // If you do not want to use a username and password, change next line to
     // if (client.connect("ESP8266Client")) {
-    if (client.connect("ESP8266Client", mqtt_user, mqtt_password)) {
+//    if (client.connect("ESP8266Client", mqtt_user, mqtt_password)) {
+    if (client.connect("ESP32Client")) {
       Serial.println("connected");
       digitalWrite(red_led, LOW);
     } else {
