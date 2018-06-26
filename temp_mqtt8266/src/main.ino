@@ -30,13 +30,20 @@ int dst = 0;
 #define mqtt_password "YOUR_MQTT_PASSWORD"
 
 // In case you have more than one sensor, make each one a different number here
-#define sensor_number "2"
-#define humidity_topic "sensor/" sensor_number "/humidity/percentRelative"
-#define dewpoint_topic "sensor/" sensor_number "/humidity/dewPoint"
-#define temperature_c_topic "sensor/" sensor_number "/temperature/degreeCelsius"
-#define temperature_f_topic "sensor/" sensor_number "/temperature/degreeFahrenheit"
-#define barometer_hpa_topic "sensor/" sensor_number "/barometer/hectoPascal"
-#define barometer_inhg_topic "sensor/" sensor_number "/barometer/inchHg"
+
+char* topic_humidity;
+char* topic_dewpoint;
+char* topic_temperature_c;
+char* topic_temperature_f;
+char* topic_barometer_hpa;
+char* topic_barometer_inhg;
+char* topic_correction_baro;
+char* topic_correction_temp;
+char* topic_correction_dew;
+
+//char p[8]= "sensor/";
+char* prefix = (char*)"sensor/";
+
 // Lookup for your altitude and fill in here, units hPa
 // Positive for altitude above sea level
 //#define baro_corr_hpa 34.5879 // = 289m above sea level
@@ -60,7 +67,11 @@ float baro_corr_hpa=0.0;
 const uint8_t bmeaddress = 0x76;
 
 unsigned char macAddress[6];
+//String s_macAddress;
+char c_macAddress[18];
+
 char message_buff[100];
+
 
 
 
@@ -95,30 +106,58 @@ void setup() {
 
   setup_wifi();
   client.setServer(mqtt_server, 1883);
+
+  //generate topic names based on MAC address
+  topic_humidity = concat((char*)c_macAddress, "/humidity/percentRelative");
+  topic_dewpoint = concat((char*)c_macAddress, "/humidity/dewPoint");
+  topic_temperature_c = concat((char*)c_macAddress, "/temperature/degreeCelsius");
+  topic_temperature_f = concat((char*)c_macAddress, "/temperature/degreeFahrenheit");
+  topic_barometer_hpa = concat((char*)c_macAddress, "/barometer/hectoPascal");
+  topic_barometer_inhg = concat((char*)c_macAddress, "/barometer/inchHg");
+  topic_correction_baro = concat((char*)c_macAddress, "/barometer/correction");
+  topic_correction_temp = concat((char*)c_macAddress, "/temperature/correction");
+  topic_correction_dew = concat((char*)c_macAddress, "/humidity/correction");
+
   digitalWrite(blue_led, HIGH);
   digitalWrite(red_led, LOW);    
 
-  configTime(3 * 3600, 0, "pool.ntp.org", "time.nist.gov");
+  configTime(2 * 3600, 0, "pool.ntp.org", "time.nist.gov");
   Serial.println("\nWaiting for time");
   while (!time(nullptr)) {
     Serial.print(".");
     delay(1000);
   }
+  Serial.println();
   Serial.print("time received: ");
-  //printLocalTime();
-
+  printLocalTime();
+  // avoid sending values before there has been a chance to receive correction values
+  long now = millis();
+  lastMsg = now - 4500;
 
 }
 
-// void printLocalTime()
-// {
-//   struct tm timeinfo;
-//   if(!getLocalTime(&timeinfo)){
-//     Serial.println("Failed to obtain time");
-//     return;
-//   }
-//   Serial.println(&timeinfo, "%A, %B %d %Y %H:%M:%S");
-// }
+char* concat(const char *mac, const char *topic)
+{
+    char *result = (char*)malloc(strlen(mac) + strlen(topic) + 9); // +1 for the null-terminator
+    // in real code you would check for errors in malloc here
+    strcpy(result, prefix);
+    strcat(result, mac);
+    strcat(result, topic);
+    Serial.println(result);
+    return result;
+}
+
+void printLocalTime()
+{
+  time_t now = time(nullptr);
+  Serial.println(ctime(&now));
+  // struct tm timeinfo;
+  // if(!getLocalTime(&timeinfo)){
+  //   Serial.println("Failed to obtain time");
+  //   return;
+  // }
+  // Serial.println(&timeinfo, "%A, %B %d %Y %H:%M:%S");
+}
 
 void blink_red() {
   digitalWrite(red_led, LOW);
@@ -173,7 +212,13 @@ void setup_wifi() {
   Serial.println(WiFi.localIP());
   WiFi.macAddress(macAddress);
   Serial.print("MAC Address: ");
-  Serial.println (macToStr(macAddress));
+  //s_macAddress = macToStr(macAddress)
+  //Serial.println (s_macAddress);
+  //c_macAddress = (char*)macAddress;
+  for (int i = 0; i < sizeof(macAddress); ++i){
+      sprintf(c_macAddress,"%s%02x",c_macAddress,macAddress[i]);
+    }
+  Serial.println (c_macAddress);
 }
 
 String macToStr(const uint8_t* mac) {
@@ -199,8 +244,14 @@ void reconnect() {
     if (client.connect((const char*)macAddress, mqtt_user, mqtt_password)) {
       Serial.println("connected");
       digitalWrite(red_led, LOW);
-      Serial.println("subscribing to topic sensor/2/barometer/correction");
-      client.subscribe("sensor/2/barometer/correction");
+      Serial.println("subscribing to topics: ");
+      Serial.println(topic_correction_baro);
+      client.subscribe(topic_correction_baro);
+      Serial.println(topic_correction_dew);
+      client.subscribe(topic_correction_dew);
+      Serial.println(topic_correction_temp);
+      client.subscribe(topic_correction_temp);
+
       client.setCallback(callback);
       client.loop();
 
@@ -220,21 +271,31 @@ void reconnect() {
 void callback(char* topic, byte* payload, unsigned int length) {
   
   int i = 0;
-
-  Serial.println("Message arrived:  topic: " + String(topic));
+  Serial.println("Message arrived on topic: " + String(topic));
   Serial.println("Length: " + String(length,DEC));
-  
-  // create character buffer with ending null terminator (string)
-  for(i=0; i<length; i++) {
-    message_buff[i] = payload[i];
-  }
-  message_buff[i] = '\0';
-  
-  String msgString = String(message_buff);
-  
-  Serial.println("Payload: " + msgString);
 
-  baro_corr_hpa = atof(message_buff);
+  if (strcmp(topic, topic_correction_baro) == 0){
+    Serial.println ("baro");
+      // create character buffer with ending null terminator (string)
+      for(i=0; i<length; i++) {
+        message_buff[i] = payload[i];
+      }
+      message_buff[i] = '\0';
+      
+      String msgString = String(message_buff);
+      
+      Serial.println("Payload: " + msgString);
+
+      baro_corr_hpa = atof(message_buff);
+  }
+  if (strcmp(topic, topic_correction_dew) == 0){  
+    Serial.println ("dew");
+  }
+  if (strcmp(topic, topic_correction_temp) == 0){  
+    Serial.println ("temp");
+  }
+  
+
   forceMsg = true;
 }
 
@@ -303,9 +364,9 @@ void loop() {
       Serial.print(String(temp_c) + " degC   ");
       Serial.println(String(temp_f) + " degF");
       // Serial.println(temp_c_str);
-      client.publish(temperature_c_topic, String(temp_c).c_str(), true);
-      // client.publish(temperature_c_topic, temp_c_str.c_str(), true);
-      // client.publish(temperature_f_topic, String(temp_f).c_str(), true);
+      client.publish(topic_temperature_c, String(temp_c).c_str(), true);
+      // client.publish(topic_temperature_c, temp_c_str.c_str(), true);
+      // client.publish(topic_temperature_f, String(temp_f).c_str(), true);
       //blink_blue();
     }
 
@@ -313,12 +374,12 @@ void loop() {
       hum = newHum;
       Serial.print("New humidity:");
       Serial.println(String(hum) + " %");
-      client.publish(humidity_topic, String(hum).c_str(), true);
+      client.publish(topic_humidity, String(hum).c_str(), true);
       //blink_blue();
       dewPoint = dewPointFast(temp, hum);
       Serial.print("New dewPoint:");
       Serial.println(String(dewPoint) + " °C");
-      client.publish(dewpoint_topic, String(dewPoint).c_str(), true);
+      client.publish(topic_dewpoint, String(dewPoint).c_str(), true);
     }
 
     if (checkBound(newBaro, baro, diffbaro) || forceMsg) {
@@ -328,8 +389,8 @@ void loop() {
       Serial.print("New barometer:");
       Serial.print(String(baro_hpa) + " hPa   ");
       Serial.println(String(baro_inhg) + " inHg");
-      client.publish(barometer_hpa_topic, String(baro_hpa).c_str(), true);
-      client.publish(barometer_inhg_topic, String(baro_inhg).c_str(), true);
+      client.publish(topic_barometer_hpa, String(baro_hpa).c_str(), true);
+      client.publish(topic_barometer_inhg, String(baro_inhg).c_str(), true);
       //blink_blue();
     }
 
