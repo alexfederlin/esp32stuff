@@ -1,7 +1,3 @@
-#include <Arduino.h>
-//#include <WiFi.h>
-//#include "WiFiMulti.h"
-
 #include <ESP8266WiFi.h>
 #include <Wire.h>
 #include <PubSubClient.h>
@@ -10,27 +6,23 @@
 #include <time.h>
 #include <stdlib.h>
 
-
-// #include "BlueDot_BME280_TSL2591.h"
-// BlueDot_BME280_TSL2591 bme;
-
-
-int timezone = 3;
+// Time Config
+int timezone = 2;
 int dst = 0;
 
-// WiFiMulti WiFiMulti;
 
+// Wifi Config
 #define wifi_ssid "iot"
 #define wifi_password "iot123456"
+unsigned char macAddress[6];
+char c_macAddress[18];
 
-
-
+// MQTT Config
 #define mqtt_server "192.168.2.2"
 #define mqtt_user "YOUR_MQTT_USERNAME"
 #define mqtt_password "YOUR_MQTT_PASSWORD"
 
-// In case you have more than one sensor, make each one a different number here
-
+// MQTT Topics
 char* topic_humidity;
 char* topic_dewpoint;
 char* topic_temperature_c;
@@ -39,41 +31,34 @@ char* topic_barometer_hpa;
 char* topic_barometer_inhg;
 char* topic_correction_baro;
 char* topic_correction_temp;
-char* topic_correction_dew;
+char* topic_correction_hum;
+char* topicprefix = (char*)"sensor/";
 
-//char p[8]= "sensor/";
-char* prefix = (char*)"sensor/";
-
-// Lookup for your altitude and fill in here, units hPa
-// Positive for altitude above sea level
-//#define baro_corr_hpa 34.5879 // = 289m above sea level
-
+// flowcontrol
 long lastMsg = 0;
 long lastForceMsg = 0;
 bool forceMsg = false;
+
+// Initial sensor values
 float temp = 0.0;
 float hum = 0.0;
 float dewPoint = 0.0;
 float baro = 0.0;
+
+//only post new values if the differ by this much from previously posted value
 float difftemp = 0.1;
 float diffhum = 1;
 float diffbaro = 0.5;
 
-float baro_corr_hpa=0.0;
+// Initial Correction Values
+float correction_baro=0.0;
+float correction_hum=0.0;
+float correction_temp=0.0;
 
+//Wiring config
 #define red_led 0
 #define blue_led 2
-
 const uint8_t bmeaddress = 0x76;
-
-unsigned char macAddress[6];
-//String s_macAddress;
-char c_macAddress[18];
-
-char message_buff[100];
-
-
-
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -93,7 +78,9 @@ void setup() {
   Wire.begin(4, 5);
   // for ESP32
   //Wire.begin(21, 22);
-  blink_red();
+  blink_blue();
+
+  //wait for sensor to get online
   delay(1000);
 
   // Start sensor
@@ -103,25 +90,24 @@ void setup() {
     delay(1000);
   }
 
-
   setup_wifi();
   client.setServer(mqtt_server, 1883);
 
   //generate topic names based on MAC address
+  Serial.println("will post on following topics:");
   topic_humidity = concat((char*)c_macAddress, "/humidity/percentRelative");
   topic_dewpoint = concat((char*)c_macAddress, "/humidity/dewPoint");
   topic_temperature_c = concat((char*)c_macAddress, "/temperature/degreeCelsius");
-  topic_temperature_f = concat((char*)c_macAddress, "/temperature/degreeFahrenheit");
   topic_barometer_hpa = concat((char*)c_macAddress, "/barometer/hectoPascal");
-  topic_barometer_inhg = concat((char*)c_macAddress, "/barometer/inchHg");
+  Serial.println("will look for correction values on following topics:");
   topic_correction_baro = concat((char*)c_macAddress, "/barometer/correction");
   topic_correction_temp = concat((char*)c_macAddress, "/temperature/correction");
-  topic_correction_dew = concat((char*)c_macAddress, "/humidity/correction");
+  topic_correction_hum = concat((char*)c_macAddress, "/humidity/correction");
 
   digitalWrite(blue_led, HIGH);
   digitalWrite(red_led, LOW);    
 
-  configTime(2 * 3600, 0, "pool.ntp.org", "time.nist.gov");
+  configTime(timezone * 3600, dst, "pool.ntp.org", "time.nist.gov");
   Serial.println("\nWaiting for time");
   while (!time(nullptr)) {
     Serial.print(".");
@@ -130,33 +116,30 @@ void setup() {
   Serial.println();
   Serial.print("time received: ");
   printLocalTime();
+
   // avoid sending values before there has been a chance to receive correction values
   long now = millis();
   lastMsg = now - 4500;
 
 }
 
+// helps putting together the topic names
 char* concat(const char *mac, const char *topic)
 {
     char *result = (char*)malloc(strlen(mac) + strlen(topic) + 9); // +1 for the null-terminator
     // in real code you would check for errors in malloc here
-    strcpy(result, prefix);
+    strcpy(result, topicprefix);
     strcat(result, mac);
     strcat(result, topic);
     Serial.println(result);
     return result;
 }
 
+// prints local time
 void printLocalTime()
 {
   time_t now = time(nullptr);
   Serial.println(ctime(&now));
-  // struct tm timeinfo;
-  // if(!getLocalTime(&timeinfo)){
-  //   Serial.println("Failed to obtain time");
-  //   return;
-  // }
-  // Serial.println(&timeinfo, "%A, %B %d %Y %H:%M:%S");
 }
 
 void blink_red() {
@@ -183,126 +166,102 @@ void setup_wifi() {
   Serial.print(" with password: ");
   Serial.print(wifi_password);
 
-  // WiFi.begin(wifi_ssid, wifi_password);
-
-  // while (WiFi.status() != WL_CONNECTED) {
-  //   blink_blue();
-  //   delay(480);
-  //   Serial.print(".");
-  // }
-
-
- WiFi.begin(wifi_ssid, wifi_password);
-
-    while (WiFi.status() != WL_CONNECTED) {
-        delay(500);
-        Serial.print(".");
-    }
-
-
-  // WiFiMulti.addAP(wifi_ssid, wifi_password);
-  // while(WiFiMulti.run() != WL_CONNECTED) {
-  //     Serial.print(".");
-  //     delay(500);
-  // }
-
+  WiFi.begin(wifi_ssid, wifi_password);
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+    blink_blue();
+  }
+  digitalWrite(blue_led, HIGH);
   Serial.println("");
   Serial.println("WiFi connected");
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
+  // find out the MAC address of the device
   WiFi.macAddress(macAddress);
   Serial.print("MAC Address: ");
-  //s_macAddress = macToStr(macAddress)
-  //Serial.println (s_macAddress);
-  //c_macAddress = (char*)macAddress;
+
+  //transform the array of hex into something we can print
   for (int i = 0; i < sizeof(macAddress); ++i){
       sprintf(c_macAddress,"%s%02x",c_macAddress,macAddress[i]);
     }
   Serial.println (c_macAddress);
 }
 
-String macToStr(const uint8_t* mac) {
-  String result;
-  for (int i = 0; i < 6; ++i) {
-    result += String(mac[i], 16);
-    if (i < 5)
-        result += ':';
-  }
-  return result;
-}
-
 void reconnect() {
   // Loop until we're reconnected
-  Serial.print("Connected: ");
+  Serial.print("Connectedto MQTT: ");
   Serial.println(client.connected());
   while (!client.connected()) {
     Serial.print("Attempting MQTT connection...");
-    // Attempt to connect
-    // If you do not want to use a username and password, change next line to
-    // if (client.connect("ESP8266Client")) {
-//    if (client.connect("ESP8266Client", mqtt_user, mqtt_password)) {
+    blink_blue();
     if (client.connect((const char*)macAddress, mqtt_user, mqtt_password)) {
       Serial.println("connected");
       digitalWrite(red_led, LOW);
       Serial.println("subscribing to topics: ");
       Serial.println(topic_correction_baro);
       client.subscribe(topic_correction_baro);
-      Serial.println(topic_correction_dew);
-      client.subscribe(topic_correction_dew);
+      Serial.println(topic_correction_hum);
+      client.subscribe(topic_correction_hum);
       Serial.println(topic_correction_temp);
       client.subscribe(topic_correction_temp);
 
       client.setCallback(callback);
       client.loop();
 
-    } else {
+    } 
+    else {
       Serial.print("failed, rc=");
       Serial.print(client.state());
       Serial.println(" try again in 5 seconds");
       // Wait 5 seconds before retrying
-      blink_red();
+      blink_blue();
       delay(200);
-      blink_red();
+      blink_blue();
       delay(4760);
     }
   }
+  Serial.print("Connected to MQTT: ");
+  Serial.println(client.connected());
+  digitalWrite(blue_led, HIGH);
 }
 
+// callback that is called if a message is received on any of the subscribed topics
 void callback(char* topic, byte* payload, unsigned int length) {
   
   int i = 0;
+
+
   Serial.println("Message arrived on topic: " + String(topic));
   Serial.println("Length: " + String(length,DEC));
+  char message_buff[length+1];
 
   if (strcmp(topic, topic_correction_baro) == 0){
-    Serial.println ("baro");
-      // create character buffer with ending null terminator (string)
-      for(i=0; i<length; i++) {
-        message_buff[i] = payload[i];
-      }
-      message_buff[i] = '\0';
+    Serial.print("Receiving correction value for barometric pressure: ");
+    // create character buffer with ending null terminator (string)
+    for(i=0; i<length; i++) {
+      message_buff[i] = payload[i];
+    }
+    message_buff[i] = '\0';
       
-      String msgString = String(message_buff);
-      
-      Serial.println("Payload: " + msgString);
-
-      baro_corr_hpa = atof(message_buff);
+    String msgString = String(message_buff);
+    Serial.println(msgString);
+    correction_baro = atof(message_buff);
   }
-  if (strcmp(topic, topic_correction_dew) == 0){  
+  if (strcmp(topic, topic_correction_hum) == 0){  
     Serial.println ("dew");
   }
   if (strcmp(topic, topic_correction_temp) == 0){  
     Serial.println ("temp");
   }
-  
 
   forceMsg = true;
 }
 
+// check if new measurement needs to be posted or not
 bool checkBound(float newValue, float prevValue, float maxDiff) {
   return newValue < prevValue - maxDiff || newValue > prevValue + maxDiff;
 }
-
 
 
 // delta max = 0.6544 wrt dewPoint()
@@ -316,16 +275,6 @@ double dewPointFast(double celsius, double humidity)
  double Td = (b * temp) / (a - temp);
  return Td;
 }
-
-// std::string createJson(float value, String unit){
-//   time_t now = time(nullptr); //uint32_t
-//   // String time = ctime(&now);
-//   Serial.println(ctime(&now));
-//   char valchar[6];
-//   dtostrf(value, 4, 2, valchar);
-//   std::string json(std::string("{\"time\": ")+ std::string(ctime(&now)) +", \"value\": "+ std::string(valchar) +", \"unit\": \""+ std::string(unit.c_str()) +"\"}");
-//   return json;
-// }
 
 void loop() {
   if (!client.connected()) {
@@ -346,28 +295,17 @@ void loop() {
       Serial.println("Forcing publish every 5 minutes...");
     }
 
-    float newTemp = bme.readTemperature();
-    float newHum = bme.readHumidity();
-    float newBaro = bme.readPressure() / 100.0F;
-
-    // float newTemp = bme.readTempC();
-    // float newHum = bme.readHumidity();
-    // float newBaro = bme.readPressure();
+    float newTemp = bme.readTemperature() + correction_temp;
+    float newHum = bme.readHumidity() + correction_hum;
+    float newBaro = bme.readPressure() / 100.0F + correction_baro;
 
     if (checkBound(newTemp, temp, difftemp) || forceMsg) {
       temp = newTemp;
-      float temp_c=temp; // Celsius
-      float temp_f=temp*1.8F+32.0F; // Fahrenheit
-      // std::string temp_c_str(createJson(temp_c, "degC"));
-      // std::string temp_f_str(createJson(temp_f, "degF"));
       Serial.print("New temperature:");
-      Serial.print(String(temp_c) + " degC   ");
-      Serial.println(String(temp_f) + " degF");
-      // Serial.println(temp_c_str);
-      client.publish(topic_temperature_c, String(temp_c).c_str(), true);
-      // client.publish(topic_temperature_c, temp_c_str.c_str(), true);
-      // client.publish(topic_temperature_f, String(temp_f).c_str(), true);
-      //blink_blue();
+      Serial.println (String(temp) + " degC");
+      client.publish(topic_temperature_c, String(temp).c_str(), true);
+      blink_blue();
+      digitalWrite(blue_led, HIGH);
     }
 
     if (checkBound(newHum, hum, diffhum) || forceMsg) {
@@ -375,23 +313,24 @@ void loop() {
       Serial.print("New humidity:");
       Serial.println(String(hum) + " %");
       client.publish(topic_humidity, String(hum).c_str(), true);
-      //blink_blue();
+
       dewPoint = dewPointFast(temp, hum);
       Serial.print("New dewPoint:");
       Serial.println(String(dewPoint) + " °C");
       client.publish(topic_dewpoint, String(dewPoint).c_str(), true);
+      blink_blue();
+      digitalWrite(blue_led, HIGH);
+
     }
 
     if (checkBound(newBaro, baro, diffbaro) || forceMsg) {
       baro = newBaro;
-      float baro_hpa=baro+baro_corr_hpa; // hPa corrected to sea level
-      float baro_inhg=(baro+baro_corr_hpa)/33.8639F; // inHg corrected to sea level
       Serial.print("New barometer:");
-      Serial.print(String(baro_hpa) + " hPa   ");
-      Serial.println(String(baro_inhg) + " inHg");
-      client.publish(topic_barometer_hpa, String(baro_hpa).c_str(), true);
-      client.publish(topic_barometer_inhg, String(baro_inhg).c_str(), true);
-      //blink_blue();
+      Serial.println(String(baro) + " hPa");
+
+      client.publish(topic_barometer_hpa, String(baro).c_str(), true);
+      blink_blue();
+      digitalWrite(blue_led, HIGH);
     }
 
     forceMsg = false;
