@@ -8,7 +8,7 @@
 ## Software
 
 - platformio
-  - [Code für ESP8266|https://github.com/alexfederlin/esp32stuff/tree/master/temp_mqtt8266]
+  - [Code für ESP8266](https://github.com/alexfederlin/esp32stuff/tree/master/temp_mqtt8266)
 - MQTT Broker (auch auf Docker)
 - Docker
   - NodeRed
@@ -108,7 +108,7 @@ Influx queries:
     http://localhost:1880
 ### Code
 
-NodeRed Flows: https://github.com/alexfederlin/esp32stuff/tree/master/nodered
+[NodeRed Flows](https://github.com/alexfederlin/esp32stuff/tree/master/nodered)
 
 ## Grafana: 
 ### Install
