@@ -3,7 +3,7 @@
 ## Hardware
 
 - [Wemos D1 miniPro](https://arduino-projekte.info/wemos-d1-mini-pro/)
-- BME-280 Temperatur-/Feuchtigkeits-/Luftdrucksensor
+- [BME-280 Temperatur-/Feuchtigkeits-/Luftdrucksensor](https://learn.adafruit.com/adafruit-bme280-humidity-barometric-pressure-temperature-sensor-breakout/downloads)
 
 ## Software
 
