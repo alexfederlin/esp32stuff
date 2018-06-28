@@ -2,7 +2,7 @@
 
 ## Hardware
 
-- Wemos D1 miniPro
+- [Wemos D1 miniPro](https://arduino-projekte.info/wemos-d1-mini-pro/)
 - BME-280 Temperatur-/Feuchtigkeits-/Luftdrucksensor
 
 ## Software
@@ -21,7 +21,7 @@
 
 Bildet die Platform der Kommunikation zwischen Microcontroller und NodeRed
 Bietet eine Publish Subscribe Mechanismus zum Austausch von Nachrichten in einem beliebig gestaltbaren hierarchischen Sytem von Topics.
-Hilfreich zur Entwicklung ist ein stand-alone MQTT Client, z.B. .[MQTTBox](http://workswithweb.com/mqttbox.html)
+Hilfreich zur Entwicklung ist ein stand-alone MQTT Client, z.B. [MQTTBox](http://workswithweb.com/mqttbox.html)
 
 ### Microcontroller 
 - verbindet sich mit dem WLAN
@@ -51,6 +51,7 @@ Dient zum Aufspielen der Software auf den Microcontroller
 
 platformio ist ein python Paket.
 Compilieren für ein Projekt wird komplett über platformio.ini im Projektverzeichnis gesteuert.
+Hier werden auch alle Libraries angegeben, die eingebunden werden.
 
 ### Usage
 
@@ -61,7 +62,7 @@ Device finden
 Build directory säubern, Sketch compilieren und hochladen, danach anfangen auf dem seriellen Device zu lauschen
 
     platformio run --target clean && platformio run --target upload && platformio device monitor -b 115200
-
+    
 ## Code für Microcontroller
 ### Notwendige Anpassungen
 - WiFi SSID und Passwort
