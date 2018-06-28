@@ -7,13 +7,13 @@
 
 ## Software
 
-- platformio
+- [platformio](https://platformio.org/)
   - [Code für ESP8266](https://github.com/alexfederlin/esp32stuff/tree/master/temp_mqtt8266)
-- MQTT Broker (auch auf Docker)
+- [MQTT Broker](https://mosquitto.org/) [(auch auf Docker)](https://hub.docker.com/_/eclipse-mosquitto/)
 - Docker
-  - NodeRed
-  - InfluxDb
-  - Grafana
+  - [NodeRed](https://hub.docker.com/r/nodered/node-red-docker/)
+  - [InfluxDb](https://hub.docker.com/_/influxdb/)
+  - [Grafana](https://hub.docker.com/r/grafana/grafana/)
 
 
 ## Allgemeine Beschreibung
@@ -21,7 +21,7 @@
 
 Bildet die Platform der Kommunikation zwischen Microcontroller und NodeRed
 Bietet eine Publish Subscribe Mechanismus zum Austausch von Nachrichten in einem beliebig gestaltbaren hierarchischen Sytem von Topics.
-Hilfreich zur Entwicklung ist ein stand-alone MQTT Client, z.B. MQTTBox
+Hilfreich zur Entwicklung ist ein stand-alone MQTT Client, z.B. .[MQTTBox](http://workswithweb.com/mqttbox.html)
 
 ### Microcontroller 
 - verbindet sich mit dem WLAN
