@@ -1,4 +1,4 @@
-# Temperatursensor mit ESP8266
+# Tür- und Temperatursensor mit ESP8266
 
 ## Hardware
 
@@ -8,12 +8,14 @@
 ## Software
 
 - [platformio](https://platformio.org/)
-  - [Code für ESP8266](https://github.com/alexfederlin/esp32stuff/tree/master/temp_mqtt8266)
+  - [ESP8266 Code - Temperatursensor](https://github.com/alexfederlin/esp32stuff/tree/master/temp_mqtt8266)
+  - [ESP8266 Code - Türsensor](https://github.com/alexfederlin/espstuff/tree/master/dooralarm)
 - [MQTT Broker](https://mosquitto.org/) [(auch auf Docker)](https://hub.docker.com/_/eclipse-mosquitto/)
 - Docker
   - [NodeRed](https://hub.docker.com/r/nodered/node-red-docker/)
   - [InfluxDb](https://hub.docker.com/_/influxdb/)
   - [Grafana](https://hub.docker.com/r/grafana/grafana/)
+- Optional [Pushbullet](https://www.pushbullet.com/) zur Benachrichtigung
 
 
 ## Allgemeine Beschreibung
@@ -132,3 +134,17 @@ Dashboard erstellen und Rows konfigurieren
 
 ![](https://d2mxuefqeaa7sj.cloudfront.net/s_8209757245AA9E8AFCEB69AF91F5DC5177A88B303B7853E8FB49343D4E6016F6_1530220743493_image.png)
 
+## Pushbullet
+
+### Install
+
+[App](https://play.google.com/store/apps/details?id=com.pushbullet.android&referrer=utm_source%3Dpushbullet.com) installieren
+
+### Setup
+
+Auf [Pushbullet.com](https://www.pushbullet.com/) anmelden und API Key erstellen
+
+NodeRed konfigurieren, dass eine Notification geschickt wird
+```
+curl --header 'Access-Token: <your_access_token_here>'      --header 'Content-Type: application/json'      --data-binary '{"body":"Die Garagentür steht offen!","title":"Türalarm","type":"note"}'      --request POST      https://api.pushbullet.com/v2/pushes
+```
