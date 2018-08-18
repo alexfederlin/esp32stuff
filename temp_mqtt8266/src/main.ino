@@ -17,7 +17,7 @@ int dst = 0;
 unsigned char macAddress[6];
 char c_macAddress[18];
 
-char buf[3];
+char rssi_buf[3];
 
 // MQTT Config
 #define mqtt_server "192.168.2.2"
@@ -339,11 +339,11 @@ void loop() {
     }
 
     if (forceMsg) {
-      itoa(WiFi.RSSI(), buf, 10);
+      itoa(WiFi.RSSI(), rssi_buf, 10);
       Serial.print("rssi: ");
-      Serial.println(buf);
+      Serial.println(rssi_buf);
 
-      client.publish(topic_rssi, buf, true);
+      client.publish(topic_rssi, rssi_buf, true);
     }
 
     forceMsg = false;

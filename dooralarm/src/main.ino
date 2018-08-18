@@ -6,7 +6,7 @@
 #define red_led 5        // D1
 #define blue_led 4       // D2
 
-// These pins have internal pullups
+// Pins 0 and 2 have internal pullups
 // Reed switches must close against GND
 #define backdoor_pin 0   // D3
 #define garagedoor_pin 2 // D4
@@ -17,8 +17,8 @@ int dst = 0;
 
 
 // Wifi Config
-#define wifi_ssid "iot"
-#define wifi_password "iot123456"
+#define wifi_ssid "Buschfunk"
+#define wifi_password "FritzBoxIstTotalSuper"
 unsigned char macAddress[6];
 char c_macAddress[18];
 
@@ -31,6 +31,10 @@ char c_macAddress[18];
 char* topic_backdoor;
 char* topic_garagedoor;
 char* topicprefix = (char*)"sensor/";
+char* topic_rssi;
+
+char rssi_buf[3];
+
 
 // flowcontrol
 long lastMsg = 0;
@@ -72,6 +76,7 @@ void setup() {
   Serial.println("will post on following topics:");
   topic_backdoor = concat((char*)c_macAddress, "/backdoor");
   topic_garagedoor = concat((char*)c_macAddress, "/garagedoor");
+  topic_rssi = concat((char*)c_macAddress, "/rssi");
 
   digitalWrite(blue_led, HIGH);
   digitalWrite(red_led, LOW);    
@@ -211,5 +216,13 @@ void loop() {
     Serial.print("garagedoor: ");
     Serial.println(garagedoor_char);
    }
+
+   if (forceMsg) {
+    itoa(WiFi.RSSI(), rssi_buf, 10);
+    Serial.print("rssi: ");
+    Serial.println(rssi_buf);
+    client.publish(topic_rssi, rssi_buf, true);
+   }
+
    forceMsg = false;
 }
