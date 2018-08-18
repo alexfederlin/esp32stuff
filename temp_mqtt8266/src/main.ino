@@ -17,6 +17,8 @@ int dst = 0;
 unsigned char macAddress[6];
 char c_macAddress[18];
 
+char buf[3];
+
 // MQTT Config
 #define mqtt_server "192.168.2.2"
 #define mqtt_user "YOUR_MQTT_USERNAME"
@@ -29,6 +31,7 @@ char* topic_temperature_c;
 char* topic_temperature_f;
 char* topic_barometer_hpa;
 char* topic_barometer_inhg;
+char* topic_rssi;
 char* topic_correction_baro;
 char* topic_correction_temp;
 char* topic_correction_hum;
@@ -99,6 +102,7 @@ void setup() {
   topic_dewpoint = concat((char*)c_macAddress, "/humidity/dewPoint");
   topic_temperature_c = concat((char*)c_macAddress, "/temperature/degreeCelsius");
   topic_barometer_hpa = concat((char*)c_macAddress, "/barometer/hectoPascal");
+  topic_rssi = concat((char*)c_macAddress, "/rssi");
   Serial.println("will look for correction values on following topics:");
   topic_correction_baro = concat((char*)c_macAddress, "/barometer/correction");
   topic_correction_temp = concat((char*)c_macAddress, "/temperature/correction");
@@ -289,6 +293,7 @@ void loop() {
     // MQTT broker could go away and come back at any time
     // so doing a forced publish to make sure something shows up
     // within the first 5 minutes after a reset
+
     if (now - lastForceMsg > 300000) {
       lastForceMsg = now;
       forceMsg = true;
@@ -331,6 +336,14 @@ void loop() {
       client.publish(topic_barometer_hpa, String(baro).c_str(), true);
       blink_blue();
       digitalWrite(blue_led, HIGH);
+    }
+
+    if (forceMsg) {
+      itoa(WiFi.RSSI(), buf, 10);
+      Serial.print("rssi: ");
+      Serial.println(buf);
+
+      client.publish(topic_rssi, buf, true);
     }
 
     forceMsg = false;
