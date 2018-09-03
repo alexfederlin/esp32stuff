@@ -1,4 +1,12 @@
-#include <ESP8266WiFi.h>
+#ifdef TARGET_8266
+  #include <ESP8266WiFi.h>
+#endif
+
+#ifdef TARGET_ESP32
+  #include <WiFi.h>
+#endif
+
+
 #include <Wire.h>
 #include <PubSubClient.h>
 #include <Adafruit_Sensor.h>
@@ -12,8 +20,10 @@ int dst = 0;
 
 
 // Wifi Config
-#define wifi_ssid "iot"
-#define wifi_password "iot123456"
+#define wifi_ssid "Bf24G_Std"
+#define wifi_password "FritzBoxIstTotalSuper"
+// #define wifi_ssid "iot"
+//#define wifi_password "iot123456"
 unsigned char macAddress[6];
 char c_macAddress[18];
 
@@ -78,9 +88,13 @@ void setup() {
   digitalWrite(blue_led, LOW);  
   delay(1000);
   //for 8266
+#ifdef TARGET_8266
   Wire.begin(4, 5);
+#endif
   // for ESP32
-  //Wire.begin(21, 22);
+#ifdef TARGET_ESP32
+  Wire.begin(21, 22);
+#endif
   blink_blue();
 
   //wait for sensor to get online
@@ -161,16 +175,29 @@ void blink_blue() {
 
 }
 
+
 void setup_wifi() {
   delay(10);
+
+  WiFi.disconnect();
+  delay(100);
+
   // We start by connecting to a WiFi network
   Serial.println();
   Serial.print("Connecting to Wifi SSID ");
   Serial.print(wifi_ssid);
   Serial.print(" with password: ");
   Serial.print(wifi_password);
-
+  
   WiFi.begin(wifi_ssid, wifi_password);
+  WiFi.macAddress(macAddress);
+  Serial.print("MAC Address: ");
+
+  //transform the array of hex into something we can print
+  for (int i = 0; i < sizeof(macAddress); ++i){
+      sprintf(c_macAddress,"%s%02x",c_macAddress,macAddress[i]);
+    }
+  Serial.println (c_macAddress);
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
@@ -182,14 +209,7 @@ void setup_wifi() {
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
   // find out the MAC address of the device
-  WiFi.macAddress(macAddress);
-  Serial.print("MAC Address: ");
 
-  //transform the array of hex into something we can print
-  for (int i = 0; i < sizeof(macAddress); ++i){
-      sprintf(c_macAddress,"%s%02x",c_macAddress,macAddress[i]);
-    }
-  Serial.println (c_macAddress);
 }
 
 void reconnect() {
